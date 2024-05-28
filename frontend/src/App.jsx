@@ -8,11 +8,13 @@ import Students from "./pages/Students";
 import Classes from "./pages/Classes";
 import AddStudent from './pages/AddStudent';
 import EditStudent from './pages/EditStudent';
+import ViewStudent from './pages/ViewStudent';
 
 
 function App(){
 
   const [students, setStudents] = useState([]);
+  const [student, setStudent] = useState([])
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -21,8 +23,6 @@ function App(){
       try {
           // Send a GET request to fetch all students
           const response = await axios.get('http://localhost:8000/students');
-
-          console.log(response.data)
           // Update the state with the fetched students
           setStudents(response.data);
       } catch (error) {
@@ -32,6 +32,7 @@ function App(){
    };
    fetchStudents();
   }, [])
+
 
   
 
@@ -48,7 +49,8 @@ function App(){
   
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path="/students" element={<Students students={students} />} />
+            <Route path="/students" element={<Students students={students} setStudents={setStudents} />} />
+            <Route path="/students/view/:id" element={<ViewStudent />} />
             <Route path="/students/add" element={<AddStudent />} />
             <Route path="/students/edit/:id" element={<EditStudent />} />
             <Route path="/classes" element={<Classes />} />

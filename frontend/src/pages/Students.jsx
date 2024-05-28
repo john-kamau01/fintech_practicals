@@ -1,7 +1,20 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
 
-const Students = ({students}) => {
-    // const {students} = props;
+const Students = ({students, setStudents}) => {
+
+    const handleDelete = async (id) => {
+        try {
+            // Send a DELETE request to delete the student
+            await axios.delete(`http://localhost:8000/students/${id}`);
+            // Update the list of students after deletion
+            setStudents(students.filter(student => student.id !== id));
+            console.log("Student deleted successfully...")
+        } catch (error) {
+            console.error('Error deleting student:', error);
+        }
+    };
+
     return (
         <div>
             <h1>All Students</h1>
@@ -26,13 +39,13 @@ const Students = ({students}) => {
                         <p>{student.className}</p>
                     </td>
                     <td >
-                        <Link to={`/edit/${student.id}`}>Edit</Link>
+                        <Link to={`/students/edit/${student.id}`}>Edit</Link>
                     </td>
                     <td >
-                        <Link to={`/view/${student.id}`}>View</Link>
+                        <Link to={`/students/view/${student.id}`}>View</Link>
                     </td>
                     <td >
-                    <Link to={`/delete/${student.id}`}>Delete</Link>
+                    <button onClick={() => handleDelete(student.id)}>Delete</button>
                     </td>
                 </tr>
             );
