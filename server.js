@@ -1,21 +1,28 @@
-const express = require("express");
+const express = require('express');
+const mysql = require('mysql2');
+const cors = require('cors');
+
 const app = express();
-const PORT = 8080;
+const PORT =  8000;
 
-const dbURL = `mongodb+srv://admin:B9RB4x3rEDzhjLbs@fintechcluster1.yq563m6.mongodb.net/FINTECH_PRACTICALS?retryWrites=true&w=majority&appName=fintechCluster1`
+app.use(express.json());
 
-// ROUTES
-app.get("/", (req, res) => {
-    res.status(200).json({message:"Welcome "})
-})
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'nodejs_fintech_project',
+});
 
-mongoose.connect(dbURL).then((dbo)=>{
-    console.log("DB connected")
-  },(err)=>{
-    console.log("error")
-  });
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL database');
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  }); 
+});
 
-// Listen to server
-app.listen(PORT, () => {
-    console.log(`Listening to port ${PORT}`)
-})
+   
